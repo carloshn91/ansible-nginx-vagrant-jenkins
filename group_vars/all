@@ -1,0 +1,11 @@
+---
+document_root: /var/www/build
+
+server_name: "{{ ansible_default_ipv4.address }}"
+
+sites_available: /etc/nginx/sites-available/default
+sites_enabled: /etc/nginx/sites-enabled/default
+
+nginx_default: roles/nginx/default
+
+user: developer

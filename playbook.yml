@@ -1,0 +1,16 @@
+---
+- name: Install Nginx
+  hosts: nginx
+  become: yes
+  remote_user: root
+
+  roles:
+    - nginx
+
+- name: Install Jenkins
+  hosts: jenkins
+  become: yes
+  remote_user: root
+
+  roles:
+    - jenkins

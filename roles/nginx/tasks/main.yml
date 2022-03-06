@@ -1,0 +1,41 @@
+---
+- name: Install the gpg key for nodejs LTS
+  apt_key:
+    url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
+    state: present
+
+- name: Install the nodejs LTS repos
+  apt_repository:
+    repo: "deb https://deb.nodesource.com/node_17.x bionic main"
+    state: present
+    update_cache: yes
+
+- name: Update apt cache and install Nginx
+  apt:
+    name: ['nginx', 'nodejs']
+    state: latest
+    update_cache: yes
+
+- name: Example clone of a single branch
+  ansible.builtin.git:
+    repo: https://github.com/carloshn91/website.git
+    dest: /home/vagrant/website
+
+- name: Install Dependences
+  become_method: sudo
+  shell: 'cd website && \ 
+          npm install && \ 
+          npm run build && mv build /var/www/'
+
+- name: Apply Nginx template
+  template:
+    src: "{{ nginx_default }}"
+    dest: "{{ sites_available }}"
+  notify: Restart Nginx
+
+- name: Enable new site
+  file:
+    src: "{{ sites_available }}"
+    dest: "{{ sites_enabled }}"
+    state: link
+  notify: Restart Nginx
