@@ -16,12 +16,12 @@
     state: latest
     update_cache: yes
 
-- name: Example clone of a single branch
+- name: Clone of a Repository from GitHub
   ansible.builtin.git:
     repo: https://github.com/carloshn91/website.git
     dest: /home/vagrant/website
 
-- name: Install Dependences
+- name: Install and Build Dependences
   become_method: sudo
   shell: 'cd website && \ 
           npm install && \ 
